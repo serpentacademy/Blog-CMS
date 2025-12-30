@@ -1,1 +1,1 @@
-Building a Open Sourcee CMS Blog on Firebase
+Building a Open Source CMS Blog on Firebase
