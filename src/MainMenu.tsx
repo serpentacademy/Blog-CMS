@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, BookOpen, Layers, Tag, Menu, X, Search, Moon, Sun } from 'lucide-react';
 import './css/MainMenu.css';
-import logo from "./logo.jpg";
+import logo from "./logo.png";
 
 const MainMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

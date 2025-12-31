@@ -1,5 +1,5 @@
 // data.ts
-import art2 from "./logo.jpg"
+import art2 from "./logo.png"
 
 import art from "./logo2.jpg"
 export type ContentUnit = {
