@@ -3,43 +3,42 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-// Import your pages and components
+import Layout from './Layout';
 import Home from './Home';
-import Post from './components/Post';
-import Layout from './Layout'; // <--- Import the wrapper we made
+import Post from './components/Post'; 
+import Posts from './components/Posts'; 
 import './index.css'; 
-import Posts from './components/Posts'; // <--- The New List Page
-// Optional: Placeholder components if you haven't built them yet
+
+// Optional: Placeholder components
 const Placeholder = ({title}: {title: string}) => (
-  <div style={{textAlign: 'center', marginTop: '50px'}}>
-    <h1 style={{color: '#fff'}}>{title}</h1>
+  <div style={{textAlign: 'center', marginTop: '100px'}}>
+    <h1 style={{color: 'var(--nav-text-hover)'}}>{title}</h1>
   </div>
 );
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // 1. Layout wraps everything
-    children: [          // 2. All pages go inside 'children'
+    element: <Layout />, 
+    children: [
       {
-        path: "/", // Corresponds to <Outlet /> in Layout
+        path: "/", 
         element: <Home />,
       },
       
-      // The Feed Route (Grid of 9 posts)
+      // 1. FIXED: Removed the duplicate "Placeholder" route for /posts
       {
         path: "/posts",
         element: <Posts />,
       },
+      
+      // 2. FIXED: Changed ":id" to ":postSlug" to match your Post.tsx code
       {
-        path: "/post/:id",
+        path: "/post/:postSlug",
         element: <Post />,
       },
-      // New Routes as requested
-      {
-        path: "/posts",
-        element: <Placeholder title="All Posts" />,
-      },
+
+      // Placeholders for other pages
       {
         path: "/categories",
         element: <Placeholder title="Categories" />,

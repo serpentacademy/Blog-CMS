@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, orderBy, limit, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase'; // Ensure you have this configured
+import { db } from '../firebase'; 
 import { Calendar, Eye, ArrowRight, TrendingUp, Clock } from 'lucide-react';
 import '../css/Posts.css';
 
@@ -29,7 +29,7 @@ const Posts: React.FC = () => {
       try {
         const postsRef = collection(db, "posts");
         
-        // Dynamic Query based on filter
+        // Query: Sort by filter, Limit to 9 (3x3 grid)
         const sortField = filter === 'trending' ? 'views' : 'createdAt';
         const q = query(postsRef, orderBy(sortField, "desc"), limit(9));
 
@@ -42,8 +42,6 @@ const Posts: React.FC = () => {
         setPosts(postsData);
       } catch (error) {
         console.error("Error fetching posts:", error);
-        // Fallback dummy data for visual testing if DB fails/is empty
-        setPosts(dummyPosts); 
       } finally {
         setLoading(false);
       }
@@ -52,10 +50,9 @@ const Posts: React.FC = () => {
     fetchPosts();
   }, [filter]);
 
-  // Helper to format date
+  // Helper to format date safely
   const formatDate = (ts: Timestamp) => {
-    // Check if ts exists to prevent crash on dummy data
-    if (!ts || !ts.toDate) return "Oct 24, 2025"; 
+    if (!ts || !ts.toDate) return ""; 
     return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(ts.toDate());
   };
 
@@ -85,7 +82,8 @@ const Posts: React.FC = () => {
       {/* Grid Content */}
       {loading ? (
         <div className="loading-grid">
-           {[1,2,3].map(i => <div key={i} className="skeleton-card"></div>)}
+           {/* Display 9 skeletons for loading state */}
+           {[...Array(9)].map((_, i) => <div key={i} className="skeleton-card"></div>)}
         </div>
       ) : (
         <div className="posts-grid">
@@ -101,11 +99,11 @@ const Posts: React.FC = () => {
               <div className="card-content">
                 <div className="card-meta">
                    <span className="meta-item"><Calendar size={14} /> {formatDate(post.createdAt)}</span>
-                   <span className="meta-item"><Eye size={14} /> {post.views.toLocaleString()}</span>
+                   <span className="meta-item"><Eye size={14} /> {post.views?.toLocaleString() || 0}</span>
                 </div>
                 
                 <h3 className="card-title">{post.title}</h3>
-                <p className="card-excerpt">{post.description.substring(0, 100)}...</p>
+                <p className="card-excerpt">{post.description ? post.description.substring(0, 100) + "..." : ""}</p>
               </div>
             </div>
           ))}
@@ -114,27 +112,5 @@ const Posts: React.FC = () => {
     </div>
   );
 };
-
-// --- Dummy Data for Preview ---
-const dummyPosts: PostData[] = [
-  {
-    id: '1', title: 'The Art of Digital Minimalism', slug: 'digital-minimalism',
-    description: 'Curating your digital space for clarity, creativity, and calm in a noisy world.',
-    image: 'https://images.unsplash.com/photo-1493934558415-9d19f0b2b4d2?auto=format&fit=crop&w=800',
-    views: 1204, createdAt: { toDate: () => new Date() } as Timestamp
-  },
-  {
-    id: '2', title: 'Designing for the Future', slug: 'design-future',
-    description: 'How cyberpunk aesthetics are influencing modern UI design trends.',
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800',
-    views: 850, createdAt: { toDate: () => new Date() } as Timestamp
-  },
-  {
-    id: '3', title: 'Flow State Engineering', slug: 'flow-state',
-    description: 'Practical tips to hack your brain into deep work mode instantly.',
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800',
-    views: 3200, createdAt: { toDate: () => new Date() } as Timestamp
-  },
-];
 
 export default Posts;
