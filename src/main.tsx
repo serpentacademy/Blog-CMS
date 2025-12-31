@@ -8,7 +8,7 @@ import Home from './Home';
 import Post from './components/Post';
 import Layout from './Layout'; // <--- Import the wrapper we made
 import './index.css'; 
-
+import Posts from './components/Posts'; // <--- The New List Page
 // Optional: Placeholder components if you haven't built them yet
 const Placeholder = ({title}: {title: string}) => (
   <div style={{textAlign: 'center', marginTop: '50px'}}>
@@ -24,6 +24,12 @@ const router = createBrowserRouter([
       {
         path: "/", // Corresponds to <Outlet /> in Layout
         element: <Home />,
+      },
+      
+      // The Feed Route (Grid of 9 posts)
+      {
+        path: "/posts",
+        element: <Posts />,
       },
       {
         path: "/post/:id",
