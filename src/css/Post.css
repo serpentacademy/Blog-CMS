@@ -1,0 +1,723 @@
+/* Post.css - "The Writer's Desk" Theme */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@400;600&display=swap');
+
+:root {
+    /* Pure Minimalist Palette */
+    --bg-paper: #ffffff;
+    --text-ink: #111111;       /* Almost black for sharpness */
+    --text-pencil: #555555;    /* Dark gray for secondary text */
+    --accent-color: #000000;   /* Kleon uses bold black accents */
+    --border-light: #e0e0e0;
+    
+    /* Fonts */
+    --font-reading: 'Merriweather', serif; /* For the main content */
+    --font-ui: 'Inter', sans-serif;       /* For menus and sidebars */
+}
+
+body {
+    background-color: var(--bg-paper);
+    color: var(--text-ink);
+    font-family: var(--font-reading);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- THE 3-COLUMN GRID --- */
+.page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px; /* Clean breathing room */
+}
+
+.clean-grid-layout {
+    display: grid;
+    /* 20% Sidebar | 55% Content | 25% Sidebar */
+    grid-template-columns: 220px 1fr 280px; 
+    gap: 60px;
+    align-items: start;
+}
+
+/* --- LEFT SIDEBAR (Products/Books) --- */
+.layout-sidebar.left {
+    padding-top: 10px;
+}
+
+.sidebar-title {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-pencil);
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--text-ink); /* The "Kleon" thick bar */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* Product/Book Cards */
+.product-card {
+    display: block;
+    text-decoration: none;
+    margin-bottom: 40px;
+}
+.product-image-wrapper {
+    background: #f4f4f4;
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.1); /* Hard shadow, not glow */
+    border: 1px solid #ddd;
+}
+.product-image-wrapper:hover {
+    transform: translateY(-2px);
+    box-shadow: 7px 7px 0px rgba(0,0,0,0.2);
+}
+.product-image { width: 100%; display: block; }
+
+.product-info h4 {
+    font-family: var(--font-ui);
+    color: var(--text-ink);
+    font-size: 0.9rem;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+.product-info p {
+    font-family: var(--font-ui);
+    color: var(--text-pencil);
+    font-size: 0.8rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- MIDDLE COLUMN (The Post) --- */
+.post-header {
+    margin-bottom: 40px;
+    text-align: left; /* Writer style */
+}
+
+.meta-date {
+    font-family: var(--font-ui);
+    color: var(--text-pencil);
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.post-title {
+    font-family: var(--font-ui); /* Or Serif depending on preference */
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-ink);
+    line-height: 1.1;
+    margin-bottom: 30px;
+    letter-spacing: -0.03em;
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 40px;
+    /* Minimalist border */
+    border: 1px solid #eee; 
+}
+
+.post-content {
+    font-size: 1.15rem; /* Large readable text */
+    color: #333;
+}
+
+.unit-text {
+    margin-bottom: 24px;
+}
+
+/* --- RIGHT SIDEBAR (Author & Subscribe) --- */
+.layout-sidebar.right {
+    border-left: 1px solid var(--border-light); /* Vertical divider line */
+    padding-left: 40px;
+}
+
+/* Author Circle */
+.author-card {
+    margin-bottom: 50px;
+    text-align: left;
+}
+.author-image-wrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    filter: grayscale(100%); /* Classy B&W photo */
+    transition: filter 0.3s;
+}
+.author-image-wrapper:hover { filter: grayscale(0%); }
+.author-image { width: 100%; height: 100%; object-fit: cover; }
+
+.author-name {
+    font-family: var(--font-ui);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.author-bio {
+    font-family: var(--font-reading);
+    font-size: 0.9rem;
+    color: var(--text-pencil);
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+/* Subscribe Box */
+.signup-card {
+    background: #f9f9f9;
+    padding: 30px;
+    border: 1px solid #eee;
+    text-align: center;
+}
+.signup-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    margin-top: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.signup-text {
+    font-size: 0.85rem;
+    color: var(--text-pencil);
+    margin-bottom: 20px;
+}
+.signup-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    background: #fff;
+}
+.signup-btn {
+    width: 100%;
+    padding: 12px;
+    background: #cc0000; /* Standard "Subscribe" red, or use black */
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+}
+.signup-btn:hover { background: #000; }
+
+/* --- THE SAVE BUTTON (Minimalist) --- */
+.pinterest-action-area {
+    margin-top: 60px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 40px;
+    text-align: center;
+}
+
+.clean-pin-button {
+    background: #fff;
+    border: 2px solid #000;
+    color: #000;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 4px 4px 0px #000; /* Brutalist shadow */
+}
+
+.clean-pin-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+}
+
+.clean-pin-button svg {
+    fill: #cc0000; /* Pinterest Red Icon */
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+    .clean-grid-layout { grid-template-columns: 1fr 300px; }
+    .layout-sidebar.left { display: none; }
+    .layout-sidebar.right { border-left: none; padding-left: 0; }
+}
+@media (max-width: 768px) {
+    .clean-grid-layout { display: flex; flex-direction: column; }
+    .page-wrapper { padding: 40px 20px; }
+}
+/* Post.css */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-paper: #ffffff;
+    --text-ink: #1a1a1a;
+    --text-pencil: #666666;
+    --pinterest-red: #E60023;
+    --pinterest-hover: #ad081b;
+}
+
+body {
+    background-color: var(--bg-paper);
+    color: var(--text-ink);
+    font-family: 'Merriweather', serif; /* Classic blog feel */
+    margin: 0;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- GRID LAYOUT --- */
+.page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.clean-grid-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    gap: 80px;
+    align-items: start;
+}
+
+/* --- TYPOGRAPHY & HEADER --- */
+.post-header {
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.meta-date {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-pencil);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.post-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 35px;
+    color: #000;
+    letter-spacing: -0.04em;
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+}
+
+/* --- CONTENT UNITS --- */
+.unit-wrapper {
+    margin-bottom: 32px;
+}
+
+.unit-text {
+    font-size: 1.125rem;
+    color: #2c2c2c;
+    margin-bottom: 24px;
+}
+
+/* Images */
+.image-wrapper-styled {
+    margin: 40px 0;
+}
+.unit-image {
+    width: 100%;
+    border-radius: 4px;
+    display: block;
+}
+.image-caption {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-pencil);
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Video Player (Responsive 16:9) */
+.video-wrapper-styled {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 40px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.unit-iframe, .unit-video-native {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.video-caption {
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-pencil);
+}
+
+/* --- THE BEAUTIFUL RED PINTEREST BUTTON --- */
+.pinterest-action-area {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.love-pin-button {
+    background-color: #fff;
+    border: 2px solid #eee;
+    color: #333;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.love-pin-button svg {
+    fill: var(--pinterest-red);
+    transition: transform 0.3s ease;
+}
+
+.love-pin-button strong {
+    color: var(--pinterest-red);
+    font-weight: 800;
+}
+
+/* Hover Effect: Turns Full Red */
+.love-pin-button:hover {
+    background-color: var(--pinterest-red);
+    border-color: var(--pinterest-red);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(230, 0, 35, 0.3);
+}
+
+.love-pin-button:hover svg {
+    fill: white;
+    transform: scale(1.1) rotate(-10deg);
+}
+
+.love-pin-button:hover strong {
+    color: white;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .clean-grid-layout { grid-template-columns: 1fr 300px; }
+    .layout-sidebar.left { display: none; }
+}
+@media (max-width: 768px) {
+    .clean-grid-layout { display: flex; flex-direction: column; }
+    .page-wrapper { padding: 40px 20px; }
+    .post-title { font-size: 2.2rem; }
+}
+
+/* Post.css */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-paper: #ffffff;
+    --text-ink: #1a1a1a;
+    --text-pencil: #666666;
+    --pinterest-red: #E60023;
+    --pinterest-hover: #ad081b;
+}
+
+body {
+    background-color: var(--bg-paper);
+    color: var(--text-ink);
+    font-family: 'Merriweather', serif; /* Classic blog feel */
+    margin: 0;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- GRID LAYOUT --- */
+.page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.clean-grid-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    gap: 80px;
+    align-items: start;
+}
+
+/* --- TYPOGRAPHY & HEADER --- */
+.post-header {
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.meta-date {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-pencil);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.post-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 35px;
+    color: #000;
+    letter-spacing: -0.04em;
+}
+
+/* --- IMAGES & ACTIONS --- */
+.image-wrapper-styled {
+    position: relative;
+    margin: 40px 0;
+    cursor: zoom-in; /* Indicates click-to-zoom */
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.unit-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Pinterest Save Overlay Button */
+.pinterest-save-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.pinterest-save-overlay img {
+    width: 70px; /* Adjust size as needed */
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Show on hover */
+.image-wrapper-styled:hover .pinterest-save-overlay {
+    opacity: 1;
+}
+
+/* Image Caption */
+.image-caption {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-pencil);
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* --- ZOOM MODAL --- */
+.image-zoom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95); /* Glass effect background */
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: zoom-out;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.zoomed-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 90vh;
+    display: block;
+    border-radius: 4px;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); }
+    to { transform: scale(1); }
+}
+
+/* --- CONTENT UNITS --- */
+.unit-wrapper {
+    margin-bottom: 32px;
+}
+
+.unit-text {
+    font-size: 1.125rem;
+    color: #2c2c2c;
+    margin-bottom: 24px;
+}
+
+/* Video Player (Responsive 16:9) */
+.video-wrapper-styled {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 40px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.unit-iframe, .unit-video-native {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.video-caption {
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-pencil);
+}
+
+/* --- THE BEAUTIFUL RED PINTEREST BUTTON --- */
+/* --- THE BEAUTIFUL RED PINTEREST BUTTON --- */
+.pinterest-action-area {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.love-pin-button {
+    background-color: var(--pinterest-red); /* Solid Red Background */
+    color: #ffffff; /* White Text */
+    border: none; /* No border */
+    padding: 14px 28px;
+    border-radius: 8px; /* Low border radius (Square-ish) */
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700; /* Bold text */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(230, 0, 35, 0.2); /* Soft red shadow */
+}
+
+/* Force Icon to be White */
+.love-pin-button svg {
+    fill: #ffffff; 
+    width: 24px; 
+    height: 24px;
+    display: block;
+}
+
+/* Force any strong tags inside to be white */
+.love-pin-button strong {
+    color: #ffffff;
+}
+
+/* Hover Effect: Darker Red + Lift */
+.love-pin-button:hover {
+    background-color: var(--pinterest-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(230, 0, 35, 0.35);
+}
+
+.love-pin-button:active {
+    transform: translateY(0);
+}
+
+/* Hover Effect: Turns Full Red */
+.love-pin-button:hover {
+    background-color: var(--pinterest-red);
+    border-color: var(--pinterest-red);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(230, 0, 35, 0.3);
+}
+
+.love-pin-button:hover svg {
+    fill: white;
+    transform: scale(1.1) rotate(-10deg);
+}
+
+.love-pin-button:hover strong {
+    color: white;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .clean-grid-layout { grid-template-columns: 1fr 300px; }
+    .layout-sidebar.left { display: none; }
+}
+@media (max-width: 768px) {
+    .clean-grid-layout { display: flex; flex-direction: column; }
+    .page-wrapper { padding: 40px 20px; }
+    .post-title { font-size: 2.2rem; }
+}
