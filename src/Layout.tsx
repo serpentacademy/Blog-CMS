@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import MainMenu from './MainMenu';
+import Footer from './components/Footer'; // <-- Import here
 
 const Layout = () => {
   return (
@@ -12,6 +13,7 @@ const Layout = () => {
       <main className="page-content">
         <Outlet />
       </main>
+      <Footer /> {/* <-- Add at the bottom */}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import Post from './components/Post';
 import Posts from './components/Posts'; 
 import './index.css'; 
 import Categories from './components/Categories';
+import Labels from './components/Labels';
 // Optional: Placeholder components
 const Placeholder = ({title}: {title: string}) => (
   <div style={{textAlign: 'center', marginTop: '100px'}}>
@@ -42,11 +43,11 @@ const router = createBrowserRouter([
     
       {
         path: "/labels",
-        element: <Placeholder title="Labels" />,
+        element: <Labels/>,
       },
        {
         path: "/categories",
-        element: <Categories  />,
+        element: <Categories/>,
       },
       {
   path: "/category/:categorySlug", 

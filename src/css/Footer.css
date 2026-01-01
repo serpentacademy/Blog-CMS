@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    /* Minimalist Palette */
+    --footer-bg: #ffffff;
+    --footer-border: #eaeaea;
+    --footer-text-subtle: #888888; /* Muted gray for secondary info */
+    --footer-text-ink: #222222;    /* Soft black for primary accents */
+    --heart-red: #e60023;          /* A specific red for the heart */
+    --btn-bg: #f7f7f7;
+    --btn-bg-hover: #eeeeee;
+}
+
+.footer-wrapper {
+    width: 100%;
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--footer-border);
+    padding: 24px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--footer-text-subtle);
+    /* Ensures footer sits at bottom if content is short */
+    margin-top: auto; 
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allows stacking on small screens */
+    gap: 20px;
+}
+
+/* --- LEFT SIDE --- */
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.copyright {
+    font-weight: 500;
+}
+
+.separator {
+    opacity: 0.5;
+}
+
+.open-source-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.muted-icon {
+    opacity: 0.7;
+}
+
+/* --- RIGHT SIDE --- */
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.made-with {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+/* The red heart pop */
+.heart-icon {
+    color: var(--heart-red);
+    /* Optional subtle animation */
+    /* animation: subtlePulse 2s infinite ease-in-out; */
+}
+
+/* --- GITHUB BUTTON --- */
+.github-repo-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--footer-text-ink);
+    background-color: var(--btn-bg);
+    padding: 8px 16px;
+    border-radius: 50px; /* Pill shape */
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.github-repo-btn:hover {
+    background-color: var(--btn-bg-hover);
+    border-color: var(--footer-border);
+    transform: translateY(-1px);
+}
+
+/* Optional Heart Animation */
+@keyframes subtlePulse {
+    0% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 0 16px;
+    }
+
+    .footer-left {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .separator {
+        display: none; /* Hide separator on mobile stack */
+    }
+    
+    .footer-right {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
