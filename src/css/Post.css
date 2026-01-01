@@ -721,3 +721,68 @@ body {
     .page-wrapper { padding: 40px 20px; }
     .post-title { font-size: 2.2rem; }
 }
+
+
+/* --- CATEGORIES & LABELS --- */
+
+/* Categories (Header) */
+.post-categories {
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.category-pill {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--pinterest-red); /* Using accent color */
+    background: rgba(230, 0, 35, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Labels (Footer) */
+.post-labels-section {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.labels-title {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-ink);
+}
+
+.labels-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.label-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-pencil);
+    background: #f5f5f5;
+    padding: 6px 12px;
+    border-radius: 50px; /* Pill shape */
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.label-tag:hover {
+    background: #111;
+    color: #fff;
+    transform: translateY(-1px);
+}

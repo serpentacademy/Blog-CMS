@@ -24,6 +24,8 @@ interface PostData {
     updatedAt: Timestamp;
     image: string;
     description: string;
+    categories?: string[];
+    labels?: string[];
 }
 
 // Component for images with Pinterest Save and Zoom features
@@ -152,6 +154,15 @@ const Post: React.FC = () => {
                        style={{ display: 'none' }}
                    />
 
+                   {/* 1. CATEGORIES */}
+                     {post.categories && post.categories.length > 0 && (
+                        <div className="post-categories">
+                            {post.categories.map((cat, idx) => (
+                                <a href={"/category/"+cat}><span  key={idx} className="category-pill">{cat}</span></a>
+                            ))}
+                        </div>
+                     )}
+
                    <header className="post-header">
                      <span className="meta-date">{formatDate(post.createdAt)}</span>
                      <h1 className="post-title">{post.title}</h1>
@@ -200,6 +211,17 @@ const Post: React.FC = () => {
                      ))}
                    </section>
 
+{/* 2. LABELS */}
+                    {post.labels && post.labels.length > 0 && (
+                        <div className="post-labels-section">
+                            <span className="labels-title">Tags:</span>
+                            <div className="labels-list">
+                                {post.labels.map((label, idx) => (
+                                    <span key={idx} className="label-tag">#{label}</span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     {/* BEAUTIFUL RED PINTEREST BUTTON */}
                     <div className="pinterest-action-area">
                        <button className="love-pin-button" onClick={handlePinClick}>

@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import Category from './components/Category'; // Import the new component
 import Layout from './Layout';
 import Home from './Home';
 import Post from './components/Post'; 
@@ -47,6 +47,10 @@ const router = createBrowserRouter([
         path: "/labels",
         element: <Placeholder title="Labels" />,
       },
+      {
+  path: "/category/:categorySlug", 
+  element: <Category />,
+},
     ],
   },
 ]);
