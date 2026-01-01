@@ -158,7 +158,7 @@ const Post: React.FC = () => {
                      {post.categories && post.categories.length > 0 && (
                         <div className="post-categories">
                             {post.categories.map((cat, idx) => (
-                                <a href={"/category/"+cat}><span  key={idx} className="category-pill">{cat}</span></a>
+                                <a href={"/category/"+cat}><span  key={idx} className="category-pill">{cat} </span></a>
                             ))}
                         </div>
                      )}
@@ -217,7 +217,7 @@ const Post: React.FC = () => {
                             <span className="labels-title">Tags:</span>
                             <div className="labels-list">
                                 {post.labels.map((label, idx) => (
-                                    <span key={idx} className="label-tag">#{label}</span>
+                                    <span key={idx} className="label-tag">#{label} </span>
                                 ))}
                             </div>
                         </div>
@@ -235,7 +235,6 @@ const Post: React.FC = () => {
                {/* RIGHT: AUTHOR & SIGNUP */}
                <aside className="layout-sidebar right">
                    <Author />
-                   <SignUp />
                </aside>
 
            </div>
