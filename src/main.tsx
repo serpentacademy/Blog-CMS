@@ -8,7 +8,7 @@ import Home from './Home';
 import Post from './components/Post'; 
 import Posts from './components/Posts'; 
 import './index.css'; 
-
+import Categories from './components/Categories';
 // Optional: Placeholder components
 const Placeholder = ({title}: {title: string}) => (
   <div style={{textAlign: 'center', marginTop: '100px'}}>
@@ -39,13 +39,14 @@ const router = createBrowserRouter([
       },
 
       // Placeholders for other pages
-      {
-        path: "/categories",
-        element: <Placeholder title="Categories" />,
-      },
+    
       {
         path: "/labels",
         element: <Placeholder title="Labels" />,
+      },
+       {
+        path: "/categories",
+        element: <Categories  />,
       },
       {
   path: "/category/:categorySlug", 

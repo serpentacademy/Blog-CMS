@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@300;400;700&display=swap');
+
+.categories-page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 24px 60px;
+    font-family: 'Inter', sans-serif;
+    min-height: 80vh;
+}
+
+/* --- HEADER AREA --- */
+.cats-header-section {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 60px;
+}
+
+.cats-headline {
+    font-family: 'Merriweather', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #111;
+}
+
+.cats-subhead {
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+/* --- SEARCH DROPDOWN --- */
+.search-dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: #fff;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.search-input-wrapper:focus-within {
+    border-color: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.search-icon { color: #999; margin-right: 12px; }
+
+.cat-search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+}
+
+.clear-btn, .chevron-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.clear-btn:hover, .chevron-btn:hover { color: #000; }
+
+/* The Dropdown List */
+.cat-dropdown-list {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    text-align: left;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cat-dropdown-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: background 0.1s;
+}
+
+.cat-dropdown-item:hover {
+    background: #f5f5f5;
+    color: #000;
+    font-weight: 500;
+}
+
+.cat-dropdown-item.loading, .cat-dropdown-item.empty {
+    color: #999;
+    cursor: default;
+    text-align: center;
+}
+
+/* --- RESULTS AREA --- */
+.results-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+.results-label .highlight {
+    color: #000;
+    font-weight: 700;
+    font-family: 'Merriweather', serif;
+}
+
+/* --- GRID REUSE (From Posts.css) --- */
+/* Ensure your Posts.css classes are available or copy the grid logic here */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3x3 Desktop */
+    gap: 40px;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .posts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .posts-grid { grid-template-columns: 1fr; }
+    .cats-headline { font-size: 2.2rem; }
+}
+
+/* Empty States */
+.empty-state, .empty-state-initial {
+    text-align: center;
+    padding: 60px 0;
+    color: #888;
+    background: #f9f9f9;
+    border-radius: 12px;
+}
