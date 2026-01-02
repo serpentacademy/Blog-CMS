@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  // 1. Allow public read access to 'posts'
+    // This lets your frontend fetch the blog posts
+    match /posts/{postId} {
+      allow read: if true;
+    }
+  // 2. Allow public read access to the Categories List
+    match /categories/all {
+      allow read: if true;
+    }
+    // 3. Allow public read access to the Labels List
+    match /labels/all {
+      allow read: if true;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

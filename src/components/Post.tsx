@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // 1. Import useParams to get the slug
-import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore'; // 2. Firestore imports
-import { db } from '../firebase'; // Ensure this points to your firebase config
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { db, app } from '../firebase'; 
 import Products from './Products';
 import Author from './Author';
 import SignUp from './SignUp';
+import { Eye } from 'lucide-react';
 import '../css/Post.css';
 import pinterestIcon from "../pinterest.png";
 
-// --- Types based on your Data Model ---
+// --- Interfaces ---
 interface ContentUnit {
-    typeO: string; // 'text' | 'html' | 'image' | 'video'
+    typeO?: string; 
+    type?: string; 
     title?: string;
     content: string;
 }
@@ -20,7 +23,7 @@ interface PostData {
     slug: string;
     contentUnits: ContentUnit[];
     views: number;
-    createdAt: Timestamp; // Firestore Timestamp
+    createdAt: Timestamp;
     updatedAt: Timestamp;
     image: string;
     description: string;
@@ -28,11 +31,10 @@ interface PostData {
     labels?: string[];
 }
 
-// Component for images with Pinterest Save and Zoom features
+// --- Image Helper Component ---
 const ImageWithActions = ({ src, alt, onZoom }: { src: string, alt: string, onZoom: (src: string) => void }) => {
-    
     const handlePinterestClick = (e: React.MouseEvent) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         const url = encodeURIComponent(window.location.href);
         const media = encodeURIComponent(src);
         const description = encodeURIComponent(alt);
@@ -49,22 +51,27 @@ const ImageWithActions = ({ src, alt, onZoom }: { src: string, alt: string, onZo
     );
 };
 
+// --- Main Component ---
 const Post: React.FC = () => {
-    const { postSlug } = useParams(); // Get slug from URL
+    const { postSlug } = useParams();
     const [post, setPost] = useState<PostData | null>(null);
     const [loading, setLoading] = useState(true);
     const [zoomedImage, setZoomedImage] = useState<string | null>(null);
     
-    const pinterestVerticalImage = pinterestIcon; // Or use post.image if you prefer
+    // [FIX] Use useRef instead of useState. 
+    // This tracks the ID synchronously to prevent double-calls in StrictMode.
+    const lastIncrementedId = useRef<string | null>(null);
 
-    // --- Fetch Data from Firestore ---
+    const pinterestVerticalImage = pinterestIcon;
+
+    // --- Fetch & Increment Logic ---
     useEffect(() => {
-        const fetchPost = async () => {
+        const fetchAndIncrementPost = async () => {
             if (!postSlug) return;
             
             setLoading(true);
             try {
-                // Query the 'posts' collection where 'slug' matches the URL
+                // 1. Fetch Post Data
                 const q = query(
                     collection(db, "posts"), 
                     where("slug", "==", postSlug)
@@ -73,23 +80,50 @@ const Post: React.FC = () => {
                 const querySnapshot = await getDocs(q);
 
                 if (!querySnapshot.empty) {
-                    // We take the first match (slugs should be unique)
-                    const docData = querySnapshot.docs[0].data() as PostData;
+                    const docSnapshot = querySnapshot.docs[0];
+                    const docData = docSnapshot.data() as PostData;
+                    const docId = docSnapshot.id;
+
                     setPost(docData);
+                    console.log("📄 Document Loaded. ID:", docId);
+
+                    // 2. Increment View Count
+                    // [FIX] Check if this specific ID has already been incremented in this session
+                    if (lastIncrementedId.current !== docId) {
+                        // Immediately lock this ID so subsequent renders don't trigger it
+                        lastIncrementedId.current = docId;
+
+                        const functions = getFunctions(app);
+                        const incrementView = httpsCallable(functions, 'incrementPostView');
+                        
+                        incrementView({ postId: docId })
+                            .then((result) => {
+                                console.log("✅ Cloud Function Success:", result.data);
+                            })
+                            .catch((err) => {
+                                console.error("❌ Cloud Function Error:", err);
+                                // Optional: Reset ref if it failed, so user can try again on refresh
+                                // lastIncrementedId.current = null; 
+                            });
+                    } else {
+                        console.log("ℹ️ View already incremented for this ID, skipping.");
+                    }
                 } else {
-                    console.log("No such document!");
+                    console.warn("⚠️ No post found with slug:", postSlug);
                     setPost(null);
                 }
             } catch (error) {
-                console.error("Error fetching post:", error);
+                console.error("❌ Error fetching post:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchPost();
-    }, [postSlug]);
+        fetchAndIncrementPost();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [postSlug]); 
 
+    // --- Handlers & Helpers ---
     const handlePinClick = () => {
         if (!post) return;
         const url = encodeURIComponent(window.location.href);
@@ -100,32 +134,22 @@ const Post: React.FC = () => {
 
     const formatDate = (timestamp: Timestamp) => {
         if (!timestamp) return "";
-        const date = timestamp.toDate(); // Convert Firestore Timestamp to JS Date
-        return new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(date);
+        return new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(timestamp.toDate());
     };
 
     const getYoutubeEmbedUrl = (url: string) => {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
-        return (match && match[2].length === 11)
-            ? `https://www.youtube.com/embed/${match[2]}`
-            : null;
+        return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
     };
 
-    // --- Loading State ---
-    if (loading) {
-        return <div className="page-wrapper" style={{textAlign: 'center', marginTop: '100px'}}>Loading content...</div>;
-    }
-
-    // --- Not Found State ---
-    if (!post) {
-        return <div className="page-wrapper" style={{textAlign: 'center', marginTop: '100px'}}>Post not found.</div>;
-    }
+    // --- Render States ---
+    if (loading) return <div className="page-wrapper" style={{textAlign: 'center', marginTop: '100px'}}>Loading content...</div>;
+    if (!post) return <div className="page-wrapper" style={{textAlign: 'center', marginTop: '100px'}}>Post not found.</div>;
 
     return (
         <div className="page-wrapper">
-            <br></br>
-            {/* Full-screen Zoom Modal */}
+            <br />
             {zoomedImage && (
                 <div className="image-zoom-modal" onClick={() => setZoomedImage(null)}>
                     <div className="modal-content">
@@ -134,84 +158,89 @@ const Post: React.FC = () => {
                 </div>
             )}
 
-            {/* Clean Grid Layout */}
             <div className="clean-grid-layout">
                
-               {/* LEFT: PRODUCTS */}
+               {/* Left Sidebar */}
                <div className="layout-sidebar left">
                     <Products />
                </div>
 
-               {/* CENTER: CONTENT */}
+               {/* Main Content */}
                <main className="layout-main">
                  <article className="post-container">
                    {/* Hidden Pinterest Image */}
-                   <img
-                       src={pinterestVerticalImage}
-                       alt={post.title}
-                       data-pin-description={post.description}
-                       data-pin-media={pinterestVerticalImage}
-                       style={{ display: 'none' }}
-                   />
+                   <img src={pinterestVerticalImage} alt={post.title} style={{ display: 'none' }} data-pin-media={pinterestVerticalImage} />
 
-                   {/* 1. CATEGORIES */}
-                     {post.categories && post.categories.length > 0 && (
+                   {/* Categories */}
+                   {post.categories && post.categories.length > 0 && (
                         <div className="post-categories">
                             {post.categories.map((cat, idx) => (
-                                <a href={"/category/"+cat}><span  key={idx} className="category-pill">{cat} </span></a>
+                                <a href={"/category/"+cat} key={idx}><span className="category-pill">{cat} </span></a>
                             ))}
                         </div>
-                     )}
+                   )}
 
                    <header className="post-header">
-                     <span className="meta-date">{formatDate(post.createdAt)}</span>
+                     {/* Metadata Row */}
+                     <div className="meta-data-row" style={{display:'flex', gap:'15px', color:'#666', fontSize:'0.85rem', marginBottom:'10px', textTransform:'uppercase', letterSpacing:'0.05em'}}>
+                        <span className="meta-date">{formatDate(post.createdAt)}</span>
+                        <span className="meta-views" style={{display:'flex', alignItems:'center', gap:'5px'}}>
+                            <Eye size={14} /> {post.views ? post.views.toLocaleString() : 0} Views
+                        </span>
+                     </div>
+
                      <h1 className="post-title">{post.title}</h1>
-                     {/* Hero Image with Actions */}
                      <ImageWithActions src={post.image} alt={post.title} onZoom={setZoomedImage} />
                    </header>
 
-                   <section className="post-content">
-                     {post.contentUnits && post.contentUnits.map((unit, index) => (
-                       <div key={index} className="unit-wrapper">
-                          {/* TEXT UNIT */}
-                          {unit.typeO === 'text' && <p className="unit-text">{unit.content}</p>}
-                         
-                          {/* IMAGE UNIT with Actions */}
-                          {unit.typeO === 'image' && (
-                               <div>
-                                    <ImageWithActions src={unit.content} alt={unit.title || "Visual"} onZoom={setZoomedImage} />
-                                    {unit.title && <span className="image-caption">{unit.title}</span>}
-                               </div>
-                          )}
+                   <div className="post-content-body">
+                     {post.contentUnits && post.contentUnits.map((unit, index) => {
+                       // Normalize type key (legacy support)
+                       const type = (unit.typeO || unit.type || 'text').toLowerCase();
 
-                          {/* HTML UNIT */}
-                          {unit.typeO === 'html' && (
-                              <div className="unit-html" dangerouslySetInnerHTML={{ __html: unit.content }} />
-                          )}
+                       return (
+                         <div key={index} className="unit-wrapper">
+                            
+                            {/* Text */}
+                            {type === 'text' && <p className="unit-text">{unit.content}</p>}
+                            
+                            {/* Image */}
+                            {type === 'image' && (
+                                 <div>
+                                      <ImageWithActions src={unit.content} alt={unit.title || "Visual"} onZoom={setZoomedImage} />
+                                      {unit.title && <span className="image-caption">{unit.title}</span>}
+                                 </div>
+                            )}
 
-                          {/* VIDEO UNIT */}
-                          {unit.typeO === 'video' && (
-                            <div className="video-wrapper-styled">
-                               {getYoutubeEmbedUrl(unit.content) ? (
-                                   <iframe
-                                       src={getYoutubeEmbedUrl(unit.content)!}
-                                       title={unit.title}
-                                       frameBorder="0"
-                                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                       allowFullScreen
-                                       className="unit-iframe"
-                                   ></iframe>
-                               ) : (
-                                   <video controls className="unit-video-native" src={unit.content} />
-                               )}
-                               {unit.title && <span className="video-caption">{unit.title}</span>}
-                            </div>
-                          )}
-                       </div>
-                     ))}
-                   </section>
+                            {/* HTML */}
+                            {type === 'html' && (
+                                <div className="unit-html" dangerouslySetInnerHTML={{ __html: unit.content }} />
+                            )}
 
-{/* 2. LABELS */}
+                            {/* Video */}
+                            {type === 'video' && (
+                              <div className="video-wrapper-styled">
+                                 {getYoutubeEmbedUrl(unit.content) ? (
+                                     <iframe
+                                         src={getYoutubeEmbedUrl(unit.content)!}
+                                         title={unit.title}
+                                         frameBorder="0"
+                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                         allowFullScreen
+                                         className="unit-iframe"
+                                     ></iframe>
+                                 ) : (
+                                     <video controls className="unit-video-native" src={unit.content} />
+                                 )}
+                                 {unit.title && <span className="video-caption">{unit.title}</span>}
+                              </div>
+                            )}
+                         </div>
+                       );
+                     })}
+                   </div>
+
+                    {/* Labels */}
                     {post.labels && post.labels.length > 0 && (
                         <div className="post-labels-section">
                             <span className="labels-title">Tags:</span>
@@ -222,7 +251,8 @@ const Post: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    {/* BEAUTIFUL RED PINTEREST BUTTON */}
+                    
+                    {/* Pinterest Button */}
                     <div className="pinterest-action-area">
                        <button className="love-pin-button" onClick={handlePinClick}>
                             <img width="73px" src={pinterestIcon} alt="" />
@@ -232,7 +262,7 @@ const Post: React.FC = () => {
                  </article>
                </main>
 
-               {/* RIGHT: AUTHOR & SIGNUP */}
+               {/* Right Sidebar */}
                <aside className="layout-sidebar right">
                    <Author />
                </aside>
